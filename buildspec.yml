@@ -4,6 +4,7 @@ phases:
   install:
     runtime-versions:
       nodejs: 14
+      python: 3.9
   pre_build:
     commands:
       - echo "Pre-build phase"
@@ -12,12 +13,13 @@ phases:
     commands:
       - echo "Build phase"
       - npm run build
+
   post_build:
     commands:
-      - echo "Post-build phase"
-      - aws s3 sync dist/ s3://my-bucket/my-app/
+      - echo "Collecting build logs..."
+      - python lambda_function.py
+      - echo "DONE!!"
 
 artifacts:
   files:
-    - '**/*'
-  base-directory: dist
+    - lambda_function.py
