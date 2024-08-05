@@ -4,10 +4,12 @@ phases:
     commands:
       - echo "Zipping deployment package..."
       - zip -r9 deployment_package.zip lambda_function.py
-  post_build:
+  pre_build:
     commands:
       - echo "Updating Lambda Function..."
       - aws lambda update-function-code --function-name lambda_updating --zip-file fileb://deployment_package.zip
+  post_build:
+    commands:
       - echo "Collecting build logs..."
       - python lambda_function.py
       - echo "DONE!!"
